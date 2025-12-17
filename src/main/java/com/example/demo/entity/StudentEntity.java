@@ -25,7 +25,7 @@ import jakarta.persistence.Id;
          public StudentEntity(){
 
          }
-         
+          
           public void setName(String name){
             this.name = name;
           }
