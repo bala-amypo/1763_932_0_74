@@ -32,7 +32,7 @@ import jakarta.persistence.Id;
           public String getName(){
             return this.name;
           }
-          public void setEmail(String Email){
+          public void setEmail(String email){
             this.email = email;
           }
           public String getEmail(){
