@@ -41,7 +41,7 @@ import jakarta.persistence.Id;
           public void setCgpa(Float cgpa){
             this.cgpa  = cgpa;
           }
-          public float getcgpa(){
+          public Float getCgpa(){
             return this.cgpa;
           }
  }
