@@ -1,49 +1,50 @@
 package com.example.demo.controller;
-
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.StudentEntity;
+import com.example.demo.entity.Student;
 import com.example.demo.service.StudentService;
 
+import jakarta.validation.Valid;
 
 @RestController
 public class StudentController {
+    private final StudentService service;
+    public StudentController(StudentService service) {
+    this.service = service;
+}
 
-    @Autowired
-    StudentService ser;
+@PostMapping("/addStudents")
+public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
+    return new ResponseEntity<>(service.saveStudent(student),HttpStatus.CREATED);
+}
 
-    @PostMapping("/addStudents")
-    public StudentEntity addStudents(@RequestBody StudentEntity student){
-        return ser.addStudents(student);
-    }
-    
-    @GetMapping("/getStudents")
-    public List<StudentEntity> getStudents() {
-        return ser.getStudents();
-    }
-    
-    @GetMapping("/getStudent/{id}")
-    public StudentEntity getStudentById(@PathVariable Long id) {
-        return ser.getStudentById(id);
-    }
+@GetMapping
+public List<Student> getAllStudents() {
+    return service.getAllStudents();
+}
 
-    @DeleteMapping("/deleteStudent/{id}")
-    public String deleteStudentById(@PathVariable Long id) {
-        StudentEntity student = ser.getStudentById(id);
-        if(student != null) {
-            ser.deleteStudentById(id);
-            return "Student deleted successfully.";
-        } else {
-            return "Student not found.";
-        }
-    }
+@GetMapping("/getStudents/{id}")
+public Student getStudent(@PathVariable Long id) {
+    return service.getStudentById(id);
+}
 
+@PutMapping("/students/{id}")
+public Student updateStudent(@PathVariable Long id, @Valid @RequestBody Student student){
+    return service.updateStudent(id, student);
+}
+
+@DeleteMapping("/{id}")
+public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+    service.deleteStudent(id);
+    return ResponseEntity.ok("Student deleted successfully");}
 }
